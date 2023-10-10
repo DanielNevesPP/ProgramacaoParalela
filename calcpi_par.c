@@ -24,8 +24,10 @@ int main(int argc, char *argv[]) { /* calcpi_par.c  */
     }
 
     tempo_final = MPI_Wtime();
-    printf("Foram gastos %3.6f segundos com precisão de %3.3e segundos\n", tempo_final-tempo_inicial, MPI_Wtick());
 
     MPI_Finalize();
+
+    printf("Foram gastos %3.6f segundos\n", tempo_final-tempo_inicial);
+
     return(0);
 }
