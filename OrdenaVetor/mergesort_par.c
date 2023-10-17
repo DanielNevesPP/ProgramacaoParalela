@@ -89,6 +89,9 @@ int main(int argc, char* argv[]){
     tempo_inicial = MPI_Wtime();
 
     tamanho = floor(dim / num_procs);
+    if(meu_ranque == num_procs-1){
+        tamanho += dim - (tamanho * num_procs);
+    }
     subvetor = malloc(tamanho * sizeof(int));
     MPI_Scatter(vetor, tamanho, MPI_INT, subvetor, tamanho, MPI_INT, 0, MPI_COMM_WORLD);
 
@@ -106,11 +109,12 @@ int main(int argc, char* argv[]){
     }
 
     tempo_final = MPI_Wtime();
-
+    if(meu_ranque == 0){
+        printf("Foram gastos %3.6f segundos\n", tempo_final-tempo_inicial);
+    }
+    
     MPI_Finalize();
-
-    printf("Foram gastos %3.6f segundos\n", tempo_final-tempo_inicial);
-
+    
     //printa o vetor
     for(i = 0; i < dim; i++){
         printf("%d\n", vetor[i]);
@@ -119,6 +123,7 @@ int main(int argc, char* argv[]){
     free(vetor_ordenado);
     free(vetor_aux);
     free(subvetor);
+    free(vetor);
 
     return 0;
 
