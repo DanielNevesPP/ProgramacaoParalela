@@ -72,8 +72,8 @@ void merge(int *vetor, int inicio, int meio, int fim){
 //funcao principal
 int main(int argc, char* argv[]){
 
-    int *vetor, dim = 20, i, meu_ranque, num_procs, tamanho, *subvetor, *vetor_ordenado = NULL, *vetor_aux;
-
+    int *vetor, dim = 10000000, i, meu_ranque, num_procs, tamanho, *subvetor, *vetor_ordenado = NULL, *vetor_aux, *vetortemp;
+    double tempo_inicial, tempo_final;
     vetor = malloc(dim * sizeof(int));
 
     //da valores aleatorios ao vetor
@@ -83,8 +83,8 @@ int main(int argc, char* argv[]){
     }
 
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &meu_ranque); 
-    MPI_Comm_size(MPI_COMM_WORLD, &num_procs); 
+    MPI_Comm_rank(MPI_COMM_WORLD, &meu_ranque);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 
     tempo_inicial = MPI_Wtime();
 
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
     MPI_Scatter(vetor, tamanho, MPI_INT, subvetor, tamanho, MPI_INT, 0, MPI_COMM_WORLD);
 
     vetortemp = malloc(tamanho * sizeof(int));
-    mergesort(subvetor, 0, tamanho-1);
+    mergeSort(subvetor, 0, tamanho-1);
 
     if(meu_ranque == 0){
         vetor_ordenado = malloc(dim * sizeof(int));
@@ -105,25 +105,26 @@ int main(int argc, char* argv[]){
 
     if(meu_ranque == 0){
         vetor_aux = malloc(dim * sizeof(int));
-        mergesort(vetor_ordenado, vetor_aux, 0, dim-1);
+        mergeSort(vetor_ordenado, 0, dim-1);
     }
 
     tempo_final = MPI_Wtime();
     if(meu_ranque == 0){
         printf("Foram gastos %3.6f segundos\n", tempo_final-tempo_inicial);
     }
-    
+
     MPI_Finalize();
-    
+
     //printa o vetor
-    for(i = 0; i < dim; i++){
-        printf("%d\n", vetor[i]);
-    }
+    /*for(i = 0; i < dim; i++){
+        printf("%d\n", vetor_ordenado[i]);
+    }*/
 
     free(vetor_ordenado);
     free(vetor_aux);
     free(subvetor);
     free(vetor);
+    free(vetortemp);
 
     return 0;
 
