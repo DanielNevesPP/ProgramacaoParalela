@@ -72,7 +72,7 @@ void merge(int *vetor, int inicio, int meio, int fim){
 //funcao principal
 int main(int argc, char* argv[]){
 
-    int *vetor, dim = 10000000, i, meu_ranque, num_procs, tamanho, *subvetor, *vetor_ordenado = NULL, *vetor_aux, *vetortemp;
+    int *vetor, dim = 10000000, i, meu_ranque, num_procs, tamanho, *subvetor, *vetor_ordenado = NULL;
     double tempo_inicial, tempo_final;
     vetor = malloc(dim * sizeof(int));
 
@@ -95,7 +95,6 @@ int main(int argc, char* argv[]){
     subvetor = malloc(tamanho * sizeof(int));
     MPI_Scatter(vetor, tamanho, MPI_INT, subvetor, tamanho, MPI_INT, 0, MPI_COMM_WORLD);
 
-    vetortemp = malloc(tamanho * sizeof(int));
     mergeSort(subvetor, 0, tamanho-1);
 
     if(meu_ranque == 0){
@@ -104,7 +103,6 @@ int main(int argc, char* argv[]){
     MPI_Gather(subvetor, tamanho, MPI_INT, vetor_ordenado, tamanho, MPI_INT, 0, MPI_COMM_WORLD);
 
     if(meu_ranque == 0){
-        vetor_aux = malloc(dim * sizeof(int));
         mergeSort(vetor_ordenado, 0, dim-1);
     }
 
@@ -121,10 +119,8 @@ int main(int argc, char* argv[]){
     }*/
 
     free(vetor_ordenado);
-    free(vetor_aux);
     free(subvetor);
     free(vetor);
-    free(vetortemp);
 
     return 0;
 
