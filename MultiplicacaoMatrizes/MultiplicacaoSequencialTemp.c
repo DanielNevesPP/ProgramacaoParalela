@@ -26,11 +26,11 @@ int main(){
         }
 
     t = clock();
-    for (i = 0; i < N; i ++)
+    for (j = 0; j < N; j ++)
         for (k = 0; k < N; k ++){
-            r = matriz_A[i][k];
-            for (j = 0; j < N; j ++)
-                matriz_C[i][j] += r * matriz_B[k][j];
+            r = matriz_B[k][j];
+            for (i = 0; i < N; i ++)
+                matriz_C[i][j] += r * matriz_A[i][k];
         }
     t = clock() - t;
     printf("Tempo de execucao: %lf\n", ((double)t)/CLOCKS_PER_SEC);
