@@ -27,10 +27,12 @@ int main(){
             double sum = 0.0;
             double *pA = matriz_A + i*N;
             double *pB = matriz_B + j;
-            for (k = 0; k < N; k ++)
+            for (k = 0; k < N; k ++){
                 sum += *pA * *pB;
                 pA++;
                 pB += N;
+            }
+            *pC++ = sum;
         }
     t = clock() - t;
     printf("Tempo de execucao: %lf\n", ((double)t)/CLOCKS_PER_SEC);
