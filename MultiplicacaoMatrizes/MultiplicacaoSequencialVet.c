@@ -21,10 +21,17 @@ int main(){
         }
 
     t = clock();
+    double *pC = matriz_C;
     for (i = 0; i < N; i ++)
-        for (j = 0; j < N; j ++)
+        for (j = 0; j < N; j ++){
+            double sum = 0.0;
+            double *pA = matriz_A + i*N;
+            double *pB = matriz_B + j;
             for (k = 0; k < N; k ++)
-                matriz_C[i*N + j] += matriz_A[i*N + j] * matriz_B[i*N + j];
+                sum += *pA * *pB;
+                pA++;
+                pB += N;
+        }
     t = clock() - t;
     printf("Tempo de execucao: %lf\n", ((double)t)/CLOCKS_PER_SEC);
     /*for (i = 0; i < N; i ++)
